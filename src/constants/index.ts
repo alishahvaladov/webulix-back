@@ -1,0 +1,1 @@
+export const UserRoleEnum = ["employee", "employer", "admin"];
