@@ -20,7 +20,8 @@ export const PrefixSchema: Schema = new Schema({
   code: {
     type: String,
     required: true,
-    unique: true
+    unique: true,
+    length: 2
   }
 });
 
@@ -83,9 +84,9 @@ FieldSchema.statics.insertWithCustomCode = async function(data: FieldDocument): 
 export const FieldModel = model<FieldDocument, CustomFunctionModel>("Field", FieldSchema);
 
 // Error Codes Model Initialized here
-export interface CodeDocument extends Document, ERROR_CODES {};
+export interface ErrorReasonDocument extends Document, ERROR_CODES {};
 
-export const CodeSchema: Schema = new Schema({
+export const ErrorReasonSchema: Schema = new Schema({
   error_name: {
     type: String,
     required: true,
@@ -98,11 +99,12 @@ export const CodeSchema: Schema = new Schema({
   code: {
     type: Number,
     required: true,
-    unique: true
+    unique: true,
+    length: 4
   }
 });
 
-CodeSchema.statics.insertWithCustomCode = async function(data: CodeDocument): Promise<Object> {
+ErrorReasonSchema.statics.insertWithCustomCode = async function(data: ErrorReasonDocument): Promise<Object> {
   const lastDocument = await this.findOne({}, {}, { sort: { code: -1 } });
   const nextCode = lastDocument ? getNextCustomId(lastDocument.code) : "0001";
   const newData = { ...data, code: nextCode };
@@ -111,7 +113,7 @@ CodeSchema.statics.insertWithCustomCode = async function(data: CodeDocument): Pr
   return newData;
 }
 
-export const CodeModel = model<CodeDocument, CustomFunctionModel>("Code", CodeSchema);
+export const ErrorReasonModel = model<ErrorReasonDocument, CustomFunctionModel>("ErrorReason", ErrorReasonSchema);
 
 // Custom Error Codes Uniting All 4 models from Prefix, Severity, Field and Code models.
 
@@ -119,7 +121,7 @@ export interface CustomErrorDocument extends Document {
   prefix: PrefixDocument["_id"];
   severity: SeverityDocument["_id"];
   field: FieldDocument["_id"];
-  code: CodeDocument["_id"];
+  code: ErrorReasonDocument["_id"];
   errorCode: string;
   description: string;
   custom_id: string;
@@ -141,7 +143,7 @@ export const CustomErrorSchema: Schema = new Schema({
     ref: "Field",
     required: true
   },
-  code: {
+  reason: {
     type: Schema.Types.ObjectId,
     ref: "Code",
     required: true
@@ -155,6 +157,7 @@ export const CustomErrorSchema: Schema = new Schema({
   },
   description: {
     type: String,
+    required: true
   },
   custom_id: {
     type: String,
