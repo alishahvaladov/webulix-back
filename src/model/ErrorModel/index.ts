@@ -1,5 +1,6 @@
 import { Schema, model, Document, Model } from "mongoose";
-import { ERROR_CODES } from "../../constants";
+import { ERROR_CODES, AlphabeticString } from "../../constants";
+import { string } from "zod";
 
 // Error Prefixes Model Initialized here
 interface CustomFunctionModel extends Model<PrefixDocument> {
@@ -84,7 +85,11 @@ FieldSchema.statics.insertWithCustomCode = async function(data: FieldDocument): 
 export const FieldModel = model<FieldDocument, CustomFunctionModel>("Field", FieldSchema);
 
 // Error Codes Model Initialized here
-export interface ErrorReasonDocument extends Document, ERROR_CODES {};
+export interface ErrorReasonDocument extends Document {
+  error_name: AlphabeticString,
+  message: string,
+  code?: string
+};
 
 export const ErrorReasonSchema: Schema = new Schema({
   error_name: {
@@ -97,7 +102,7 @@ export const ErrorReasonSchema: Schema = new Schema({
     required: true
   },
   code: {
-    type: Number,
+    type: String,
     required: true,
     unique: true,
     length: 4

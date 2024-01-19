@@ -2,6 +2,7 @@ import { RouterType } from "../../validations/route-dto";
 import prefixRoutes from "./prefix";
 import severityRoutes from "./severity";
 import fieldRoutes from "./field";
+import errorReasonRoutes from "./error_reason";
 
 const routes: RouterType[] = [
   {
@@ -15,6 +16,10 @@ const routes: RouterType[] = [
   {
     api: "field",
     router: fieldRoutes
+  },
+  {
+    api: "error-reason",
+    router: errorReasonRoutes
   }
 ];
 
