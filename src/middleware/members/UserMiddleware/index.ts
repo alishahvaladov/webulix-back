@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { isValidObjectId } from "mongoose";
 import { UserType, UserSchema } from "../../../validations/user-dto";
 import { ZodError } from "zod";
+import BadRequestError from "../../../error/BadRequestError";
 
 class UserMiddleware {
   validateUserID(req: Request, res: Response, next: NextFunction) {
@@ -24,12 +25,17 @@ class UserMiddleware {
       const body = UserSchema.parse(req.body);
       next();
     } catch (error) {
-      console.log(error);
       if (error instanceof ZodError) {
-        return res.status(400).send({
-          success: false,
-          message: "Missing Fields"
+        // const errorCode = ;
+        const serializedErrors = error.errors.map(err => {
+          const field = Array.isArray(err.path) ? err.path.map(String) : [String(err.path)];
+          return {
+            message: err.message,
+            field,
+            errorCode: "NET-ERROR-USER-1002",
+          }
         });
+        throw new BadRequestError(serializedErrors);
       } else {
         return res.status(500);
       }

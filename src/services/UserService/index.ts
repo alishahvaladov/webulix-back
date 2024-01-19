@@ -1,4 +1,3 @@
-import { ObjectId } from "mongoose";
 import UserModel from "../../model/UserModel";
 import { UserType } from "../../validations/user-dto";
 import isEmail from "../../utils/isEmail";
@@ -20,8 +19,6 @@ class UserService {
     } else {
       return await UserModel.findOne({ username: userInput });
     }
-
-    return false;
   }
 }
 

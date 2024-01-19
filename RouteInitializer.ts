@@ -1,5 +1,6 @@
 import { Express } from "express";
 import { RoutesType } from "./src/validations/route-dto";
+import { ErrorHandler } from "./src/middleware/ErrorHandler";
 
 
 export default class RouteInitializer {
@@ -14,5 +15,7 @@ export default class RouteInitializer {
         this.app.use(`/${routesItem.api}/${routerItem.api}`, routerItem.router);
       });
     });
+
+    this.app.use(ErrorHandler);
   }
 }

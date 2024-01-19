@@ -13,7 +13,8 @@ export const ErrorHandler = (
     });
   }
 
-  res.status(400).send({
-    message: err.message
+  return res.status(400).send({
+    message: err.message,
+    success: false
   });
 }

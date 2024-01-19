@@ -8,7 +8,7 @@ export const UserSchema = z.object({
   password: z.string(),
   username: z.string(),
   phone_number: z.number(),
-  speciality: z.custom<Schema.Types.ObjectId>(),
+  speciality: z.string(),
   role: z.string(),
   email: z.string().email()
 });

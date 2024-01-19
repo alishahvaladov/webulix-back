@@ -30,7 +30,7 @@ const UserSchema = new Schema<UserType & Document>({
     required: true
   },
   speciality: {
-    type: Schema.Types.ObjectId,
+    type: String,
     required: true,
     ref: "Speciality"
   },
