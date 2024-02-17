@@ -1,6 +1,5 @@
 import { Schema, model, Document, Model } from "mongoose";
-import { ERROR_CODES, AlphabeticString } from "../../constants";
-import { string } from "zod";
+import { AlphabeticString } from "../../constants";
 
 // Error Prefixes Model Initialized here
 interface CustomFunctionModel extends Model<PrefixDocument> {
@@ -126,7 +125,7 @@ export interface CustomErrorDocument extends Document {
   prefix: PrefixDocument["_id"];
   severity: SeverityDocument["_id"];
   field: FieldDocument["_id"];
-  code: ErrorReasonDocument["_id"];
+  reason: ErrorReasonDocument["_id"];
   errorCode: string;
   description: string;
   custom_id: string;
@@ -150,15 +149,8 @@ export const CustomErrorSchema: Schema = new Schema({
   },
   reason: {
     type: Schema.Types.ObjectId,
-    ref: "Code",
+    ref: "ErrorReason",
     required: true
-  },
-  errorCode: {
-    type: String,
-    get: function(this: CustomErrorDocument) {
-      return `${this.severity.name}-${this.prefix.code}-${this.field.code}-${this.code.code}`
-    },
-    virtual: true
   },
   description: {
     type: String,
@@ -166,16 +158,29 @@ export const CustomErrorSchema: Schema = new Schema({
   },
   custom_id: {
     type: String,
-    required: true
+    required: true,
+    unique: true,
+    length: 5
   }
 });
 
+CustomErrorSchema.virtual("errorCode").get(function () {
+  return `${this.severity.name}-${this.prefix.code}-${this.field.code}-${this.reason.code}`;
+});
+
+CustomErrorSchema.set("toObject", { getters: true });
+CustomErrorSchema.set("toJSON", { getters: true });
+
+CustomErrorSchema.pre("find", function () {
+  this.populate('prefix severity field reason');
+});
+
 CustomErrorSchema.statics.insertWithCustomCode = async function(data: CustomErrorDocument): Promise<Object> {
-  const lastDocument = await this.findOne({}, {}, { sort: { code: -1 } });
-  const nextCode = lastDocument ? getNextCustomId(lastDocument.custom_id) : "00001";
-  const newData = { ...data, code: nextCode };
+  const lastDocument = await this.findOne({}, {}, { sort: { custom_id: -1 } });
+  const nextCustomID = lastDocument ? getNextCustomId(lastDocument.custom_id) : "00001";
+  const newData = { ...data, custom_id: nextCustomID };
   await this.create(newData);
-  console.log(`Data inserted with new CustomCode ${nextCode}`);
+  console.log(`Data inserted with new CustomCode ${nextCustomID}`);
   return newData;
 }
 

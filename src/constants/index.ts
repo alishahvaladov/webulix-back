@@ -10,3 +10,11 @@ export type ERROR_CODES = {
   message: string,
   code: string,
 };
+
+export const privileges = {
+  put: "put",
+  patch: "patch",
+  post: "post",
+  update: "update",
+  delete: "delete"
+}

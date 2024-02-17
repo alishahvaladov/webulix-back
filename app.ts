@@ -7,6 +7,8 @@ import { connect, connection } from "mongoose";
 import RouteInitializer from "./RouteInitializer";
 import routes from "./src/router";
 import "express-async-errors";
+import CollectionModel from "./src/model/CollectionModel";
+import mongoose from "mongoose";
 
 dotenv.config();
 const PORT = process.env.PORT || 3000;
@@ -22,6 +24,12 @@ process.on("SIGINT", async () => {
   console.log("MongoDB connection closed.");
   process.exit(0);
 });
+
+
+setTimeout(async () => {
+  console.log(mongoose.connection.modelNames());
+  console.log(5);
+}, 1000);
 
 app.listen(PORT, () => {
   console.log(`Server is listening on port: ${PORT}`);

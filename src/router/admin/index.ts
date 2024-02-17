@@ -3,6 +3,7 @@ import prefixRoutes from "./prefix";
 import severityRoutes from "./severity";
 import fieldRoutes from "./field";
 import errorReasonRoutes from "./error_reason";
+import customErrorRoutes from "./custom_errors";
 
 const routes: RouterType[] = [
   {
@@ -20,6 +21,10 @@ const routes: RouterType[] = [
   {
     api: "error-reason",
     router: errorReasonRoutes
+  },
+  {
+    api: "custom-error",
+    router: customErrorRoutes
   }
 ];
 

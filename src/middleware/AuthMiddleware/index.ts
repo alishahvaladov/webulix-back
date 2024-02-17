@@ -1,9 +1,9 @@
 import { Request, Response, NextFunction } from "express";
 // import * as jwt from "jsonwebtoken";
 // import { UserType } from "../../../validations/user-dto";
-import PasswordHash from "../../../utils/PasswordHash";
-import { getUserByEmailOrUsername } from "../../../services/UserService";
-import NotFoundError from "../../../error/NotFoundError";
+import PasswordHash from "../../utils/PasswordHash";
+import { getUserByEmailOrUsername } from "../../services/UserService";
+import NotFoundError from "../../error/NotFoundError";
 import "express-async-errors";
 
 class AuthMiddleware {
