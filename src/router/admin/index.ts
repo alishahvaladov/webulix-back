@@ -4,6 +4,8 @@ import severityRoutes from "./severity";
 import fieldRoutes from "./field";
 import errorReasonRoutes from "./error_reason";
 import customErrorRoutes from "./custom_errors";
+import roleRoutes from "./role";
+import collectionRoutes from "./collection";
 
 const routes: RouterType[] = [
   {
@@ -25,6 +27,14 @@ const routes: RouterType[] = [
   {
     api: "custom-error",
     router: customErrorRoutes
+  },
+  {
+    api: "role",
+    router: roleRoutes
+  },
+  {
+    api: "collection",
+    router: collectionRoutes
   }
 ];
 

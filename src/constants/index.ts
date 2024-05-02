@@ -11,10 +11,15 @@ export type ERROR_CODES = {
   code: string,
 };
 
-export const privileges = {
-  put: "put",
-  patch: "patch",
-  post: "post",
-  update: "update",
-  delete: "delete"
+export enum Groups {
+  admin = "admin",
+  customer = "customer"
+}
+
+export enum Privileges {
+  put = "put",
+  patch = "patch",
+  post = "post",
+  delete = "delete",
+  get = "get"
 }

@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { isValidObjectId } from "mongoose";
-import { UserType, UserSchema } from "../../../validations/user-dto";
+import { UserSchema } from "../../../validations/user-dto";
 import { ZodError } from "zod";
 import BadRequestError from "../../../error/BadRequestError";
 
